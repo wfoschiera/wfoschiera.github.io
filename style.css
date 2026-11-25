@@ -1,104 +1,321 @@
-/* global */
-@import url('https://fonts.googleapis.com/css?family=Roboto');
-
-.grid-2{
-    display: grid;
-    grid-template-columns: [identicacao] 30% [descricao] 70%;
+/* Tokens: dark is the primary design, light follows the system preference. */
+:root {
+  --bg: #0f1214;
+  --panel: #12161a;
+  --text: #dde1da;
+  --muted: #949a92;
+  --rule: #242a2e;
+  --accent: #a3d17a;
+  --topo: #2c3a33;
+  --topo-major: #3b4d42;
+  /* NDVI ramp: bare soil to dense vegetation */
+  --ramp: linear-gradient(90deg, #a6611a, #dfc27d 35%, #a6d96a 70%, #1a9641);
+  --display: "Bricolage Grotesque", "Trebuchet MS", sans-serif;
+  --body: "Literata", Georgia, serif;
 }
 
-body{
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto', sans-serif;
-    background-color: #101214;
-    color: #7A7C80;
-
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #fbfcfa;
+    --panel: #f1f4ef;
+    --text: #1b201d;
+    --muted: #59615b;
+    --rule: #dfe4dc;
+    --accent: #3d7a1c;
+    --topo: #d3ddd0;
+    --topo-major: #b9c8b4;
+  }
 }
 
-h2,.white{
-    color: #fff;
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
 }
 
-a{
-    color: #7A7C80;
-    text-decoration: none;
+::selection { background: var(--accent); color: var(--bg); }
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: color 0.2s, text-decoration-color 0.2s;
 }
-/* section 1 */
-.section-1{
-    padding-top: 40vh;
-    text-align: center;
+a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+code {
+  font-size: 0.88em;
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  background: var(--panel);
 }
 
-.section-1 p{
-    font-size: 1.1rem;
-    padding-bottom: 10px;
-    margin:0;
+/* Layout */
+.page {
+  display: grid;
+  grid-template-columns: minmax(20rem, 40%) 1fr;
+  min-height: 100vh;
 }
 
-.section-1 h2{
-    font-size: 1.7rem;
-    margin-bottom: 10px;
+/* Identity column, with the contour map behind it */
+.id {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  padding: clamp(2rem, 5vw, 4.5rem);
+  background: var(--panel);
+  border-right: 1px solid var(--rule);
 }
 
-.section-1 a{
-    font-size: 1.5rem;
-    padding: 10px;
+.topo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
-/* section 2 */
-.section-2{
-    padding-top: 10vh;
-    width: 70%;
+.topo path {
+  fill: none;
+  stroke: var(--topo);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 2.6s cubic-bezier(0.3, 0.6, 0.2, 1) forwards;
+}
+.topo path.major { stroke: var(--topo-major); stroke-width: 1.6; }
+.topo path:nth-child(3n + 1) { animation-delay: 0.15s; }
+.topo path:nth-child(3n + 2) { animation-delay: 0.35s; }
+
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+.id-inner {
+  position: relative;
+  animation: rise 0.8s 0.2s both;
 }
 
-.section-2 h2{
-    font-size: 1.7rem;
-    margin-bottom: 10px;
+.coords {
+  margin: 0 0 1.25rem;
+  font-family: var(--display);
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+  color: var(--muted);
 }
 
-.section-2 p{
-    font-size: 1.1rem;
-    padding-bottom: 10px;
-    margin:0;
+h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 650;
+  font-size: clamp(2.75rem, 5.2vw, 4.4rem);
+  line-height: 0.98;
+  letter-spacing: -0.025em;
 }
 
-.section-2 a{
-    display: block;
-    padding: 5px;
-    font-size: 1.2rem;
-    padding-left: 0;
-    width: 100%;
-}
-/* animations / utilities */
-.section-2 a:hover{
-    font-size: 1.3rem;
-    color: #fff;
-    cursor: pointer;
-    transition: 0.2s;
+.role {
+  margin: 1.1rem 0 0;
+  max-width: 22rem;
+  font-size: 1.15rem;
+  line-height: 1.5;
+  color: var(--muted);
 }
 
-.section-1 a:hover{
-    color: #fff;
-    cursor: pointer;
-    transition: 0.3s;
+.ramp {
+  width: 9rem;
+  height: 4px;
+  margin: 1.75rem 0;
+  border-radius: 2px;
+  background: var(--ramp);
 }
 
-.white:hover{
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  font-family: var(--display);
+  font-size: 0.98rem;
+}
+.links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  text-decoration: none;
+  color: var(--text);
+}
+.links a:hover { color: var(--accent); }
+.links svg { width: 1.05rem; height: 1.05rem; flex: none; }
+
+/* Content column */
+.content {
+  padding: clamp(3rem, 9vh, 6rem) clamp(1.5rem, 6vw, 6rem) 4rem;
+  max-width: 48rem;
+}
+
+.content > section,
+.content > .foot {
+  animation: rise 0.7s both;
+  animation-delay: calc(0.35s + var(--i, 0) * 0.09s);
+}
+
+section + section { margin-top: 4.25rem; }
+
+h2 {
+  margin: 0 0 1.1rem;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.45rem;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+h2::before {
+  content: "";
+  display: block;
+  width: 1.75rem;
+  height: 3px;
+  margin-bottom: 0.85rem;
+  border-radius: 2px;
+  background: var(--ramp);
+}
+
+p { margin: 0 0 1rem; }
+
+.meta {
+  font-family: var(--display);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* What I work with */
+.stack {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  margin: 0;
+  border-top: 1px solid var(--rule);
+}
+.stack dt,
+.stack dd {
+  margin: 0;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.stack dt {
+  font-family: var(--display);
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* Projects */
+.projects {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--rule);
+}
+.projects a {
+  display: grid;
+  gap: 0.25rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--rule);
+  text-decoration: none;
+}
+.projects .name {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.12rem;
+  transition: color 0.2s;
+}
+.projects .arrow {
+  display: inline-block;
+  color: var(--accent);
+  opacity: 0;
+  transform: translateX(-0.4rem);
+  transition: opacity 0.2s, transform 0.2s;
+}
+.projects .desc { color: var(--text); line-height: 1.6; }
+.projects a:hover { color: inherit; }
+.projects a:hover .name,
+.projects a:focus-visible .name { color: var(--accent); }
+.projects a:hover .arrow,
+.projects a:focus-visible .arrow { opacity: 1; transform: none; }
+
+/* Open source */
+.oss {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+.oss li { margin-bottom: 0.75rem; padding-left: 0.25rem; }
+.oss li::marker { color: var(--accent); }
+.oss a { font-family: var(--display); font-weight: 600; }
+
+/* Research */
+.paper {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  background: var(--panel);
+  text-decoration: none;
+}
+.paper-title {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.1rem;
+  line-height: 1.35;
+}
+.paper:hover { color: inherit; }
+.paper:hover .paper-title { color: var(--accent); }
+
+/* Footer */
+.foot {
+  margin-top: 5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+.foot p { margin: 0 0 0.35rem; }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Phone and tablet: one column, the map becomes a header band */
+@media (max-width: 900px) {
+  .page { grid-template-columns: 1fr; }
+  .id {
     position: relative;
-    padding-left: 10px;
+    height: auto;
+    min-height: 26rem;
+    padding: 6rem 1rem 2.25rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .content { padding: 2.75rem 1rem 3rem; }
+  section + section { margin-top: 3.25rem; }
+  .stack { grid-template-columns: 4.75rem 1fr; }
 }
 
-/* media queres */
-@media(max-width:780px){
-    .grid-2{
-        grid-template-columns: 1fr;
-    }
-    .section-1{
-        padding:0;
-        padding-top: 5rem;
-    }
-    .section-2{
-        padding: 0;
-        padding-left: 1.5rem;
-        padding-top: 2rem;
-    }
+@media (prefers-reduced-motion: reduce) {
+  .topo path { animation: none; stroke-dashoffset: 0; }
+  .id-inner,
+  .content > section,
+  .content > .foot { animation: none; }
 }
